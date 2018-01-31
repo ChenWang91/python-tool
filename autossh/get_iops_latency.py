@@ -44,6 +44,7 @@ if __name__ == '__main__':
                 exit(1)
         path = sys.argv[1]
         log = get_log_file(path)
+        sumlat = 0
         summary = []
         Iops = [] 
         Latency = []
@@ -72,12 +73,9 @@ if __name__ == '__main__':
                             totally_iops = totally_iops + int(float(i))
         for latency in Latency:
                 for l in latency:
+                    sumlat = sumlat + 1
                     totally_latency = totally_latency + l
+        print('Number of latency is:', sumlat)
         print('Totally Iops is:', totally_iops)
-        print('Totally Latency is:', totally_latency)
-
-             
-
-
-
+        print('Totally Latency is:', int(totally_latency/sumlat))
 

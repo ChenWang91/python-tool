@@ -7,36 +7,97 @@ import paramiko
 import multiprocessing
 from ftplib import FTP
 import pdb
-def run_vm(n):
+def run_vm_spdk(n):
         if n < 10:
-            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 -cpu host -smp 8 -m 1024 -object memory-backend-file,id=mem,size=1G,mem-path=/dev/hugepages,share=on -numa node,memdev=mem -drive file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk -device ide-hd,drive=disk,bootindex=0 -net user,hostfwd=tcp::1000%i-:22 -net nic -chardev socket,id=char0,path=/home/wangchen/spdk.vhost/vhost.%i -device vhost-user-nvme,chardev=char0,num_io_queues=4 --enable-kvm' %(n,n,n), shell=True)
+            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 \
+                    -cpu host -smp 8 -m 2048 -object \
+                    memory-backend-file,id=mem,size=2G,mem-path=/dev/hugepages,share=on \
+                    -numa node,memdev=mem -drive \
+                    file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk \
+                    -device ide-hd,drive=disk,bootindex=0 -net \
+                    user,hostfwd=tcp::1000%i-:22 -net nic -chardev \
+                    socket,id=char0,path=/home/wangchen/spdk.vhost/vhost.%i \
+                    -device vhost-user-nvme,chardev=char0,num_io_queues=32 --enable-kvm' %(n,n,n), shell=True)
         elif n < 100:
-            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 -cpu host -smp 8 -m 512 -object memory-backend-file,id=mem,size=512M,mem-path=/dev/hugepages,share=on -numa node,memdev=mem -drive file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk -device ide-hd,drive=disk,bootindex=0 -net user,hostfwd=tcp::100%i-:22 -net nic -chardev socket,id=char0,path=/home/wangchen/spdk.vhost/vhost.%i -device vhost-user-nvme,chardev=char0,num_io_queues=4 --enable-kvm' %(n,n,n), shell=True)
+            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 \
+                    -cpu host -smp 8 -m 2048 -object \
+                    memory-backend-file,id=mem,size=2G,mem-path=/dev/hugepages,share=on \
+                    -numa node,memdev=mem -drive \
+                    file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk \
+                    -device ide-hd,drive=disk,bootindex=0 -net \
+                    user,hostfwd=tcp::100%i-:22 -net nic -chardev \
+                    socket,id=char0,path=/home/wangchen/spdk.vhost/vhost.%i \
+                    -device vhost-user-nvme,chardev=char0,num_io_queues=8 --enable-kvm' %(n,n,n), shell=True)
         else:
-            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 -cpu host -smp 8 -m 1024 -object memory-backend-file,id=mem,size=1G,mem-path=/dev/hugepages,share=on -numa node,memdev=mem -drive file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk -device ide-hd,drive=disk,bootindex=0 -net user,hostfwd=tcp::10%i-:22 -net nic -chardev socket,id=char0,path=/home/wangchen/spdk.vhost/vhost.%i -device vhost-user-nvme,chardev=char0,num_io_queues=4 --enable-kvm' %(n,n,n), shell=True)
+            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 \
+                    -cpu host -smp 8 -m 2048 -object \
+                    memory-backend-file,id=mem,size=2G,mem-path=/dev/hugepages,share=on \
+                    -numa node,memdev=mem -drive \
+                    file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk \
+                    -device ide-hd,drive=disk,bootindex=0 -net \
+                    user,hostfwd=tcp::10%i-:22 -net nic -chardev \
+                    socket,id=char0,path=/home/wangchen/spdk.vhost/vhost.%i \
+                    -device vhost-user-nvme,chardev=char0,num_io_queues=8 --enable-kvm' %(n,n,n), shell=True)
 
 
-def start_vm(num):
-        hugemem = num * 1024
+def run_vm_kernel(n):
+        if n < 10:
+            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 \
+                    -cpu host -smp 8 -m 2048 -object \
+                    memory-backend-file,id=mem,size=2G,mem-path=/dev/hugepages,share=on \
+                    -numa node,memdev=mem -drive \
+                    file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk \
+                    -device ide-hd,drive=disk,bootindex=0 -net \
+                    user,hostfwd=tcp::1000%i-:22 -net nic -drive \
+                    format=raw,file=nvme%d.img,if=none,id=nvmedrive \
+                    -device nvme,drive=nvmedrive,serial=1234 --enable-kvm' %(n,n,n), shell=True)
+        elif n < 100:
+            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 \
+                    -cpu host -smp 8 -m 2048 -object \
+                    memory-backend-file,id=mem,size=2G,mem-path=/dev/hugepages,share=on \
+                    -numa node,memdev=mem -drive \
+                    file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk \
+                    -device ide-hd,drive=disk,bootindex=0 -net \
+                    user,hostfwd=tcp::100%i-:22 -net nic -drive \
+                    format=raw,file=nvme%d.img,if=none,id=nvmedrive \
+                    -device nvme,drive=nvmedrive,serial=1234 --enable-kvm' %(n,n,n), shell=True)
+
+        else:
+            p = Popen('/home/wangchen/qemu.vhost/build/x86_64-softmmu/qemu-system-x86_64 \
+                    -cpu host -smp 8 -m 2048 -object \
+                    memory-backend-file,id=mem,size=2G,mem-path=/dev/hugepages,share=on \
+                    -numa node,memdev=mem -drive \
+                    file=/var/lib/libvirt/images/snapshot%i.img,if=none,id=disk \
+                    -device ide-hd,drive=disk,bootindex=0 -net \
+                    user,hostfwd=tcp::10%i-:22 -net nic -drive \
+                    format=raw,file=nvme%d.img,if=none,id=nvmedrive \
+                    -device nvme,drive=nvmedrive,serial=1234 --enable-kvm' %(n,n,n), shell=True)
+
+
+def start_vm(num, model):
+        hugemem = (num+5) * 2048
         rc = call('HUGEMEM=%d  /home/wangchen/spdk.vhost/scripts/setup.sh' %hugemem, shell=True)
         if rc == 0:
                 print('Hugemem set successfully')
         else:
                 print('Hugemem set failed')
                 exit(1)
-        [run_vm(i) for i in range(num)]
+        if model == 'spdk':
+            [run_vm_spdk(i) for i in range(num)]
+        elif model == 'kernel':
+            [run_vm_kernel(i) for i in range(num)]
 
 
 def login_vm(port,password,runtime):
         print('Start time is:', time.time())
         try:
+                paramiko.util.log_to_file("filename.log")
                 ssh = paramiko.SSHClient()
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 ssh.connect('localhost', port = int(port), username = 'root', password = password, allow_agent=False, look_for_keys=False, timeout=60)
                 sftp = paramiko.SFTPClient.from_transport(ssh.get_transport())
                 sftp = ssh.open_sftp()
-                paramiko.util.log_to_file("filename.log")
-
+                #paramiko.util.log_to_file("filename.log")
                 sftp.put("/root/fio_multi_test.job", "/root/fio_multi_test.job")
                 fio_patch = '/root/fio_%s.log' %port
                 fio_command = "fio /root/fio_multi_test.job > %s 2>&1" %fio_patch
@@ -73,7 +134,6 @@ def login_vm(port,password,runtime):
                 print('TIMEOUT')
                 ssh.close()
 
-
 def kill_vm():
         p = check_output("ps aux|grep snapshot|grep -v grep|awk '{print $2}'", shell=True)
         pid = p.strip().split('\n')
@@ -87,12 +147,25 @@ def kill_vm():
         print('The number of VMs is %d, and all the process be killed!' %num)
 
 if __name__ == '__main__':
-        if len(sys.argv) != 3:
-                print('autossh.py vmnumber runtime')
+        if len(sys.argv) != 4:
+                print('autossh.py vmnumber runtime model')
                 exit(1)
         num = int(sys.argv[1])
         runtime = sys.argv[2]
-        start_vm(num)
+        model = sys.argv[3]
+        if model == 'spdk' or model == 'kernel':
+            start_vm(num, model)
+        else:
+            print("model must be 'spdk' or 'kernel'")
+            exit(1)
+        if model == 'kernel':
+            pid = check_output("ps aux|grep qemu|grep -v grep|awk '{print $2}'", shell=True)
+            print('Qemu pid list is:', pid.strip().split('\n'))
+            for i in [call('taskset -pc 1 %d' %int(i), shell=True) for i in pid.strip().split('\n')]:
+                if i != 0:
+                    print('Set cpu core error!')
+                    exit(1)
+        
         time.sleep(60)
         pool = multiprocessing.Pool(processes=num)
         for i in range(num):
@@ -107,4 +180,3 @@ if __name__ == '__main__':
         pool.join()
         print "Sub-process done!"
         kill_vm()
-
