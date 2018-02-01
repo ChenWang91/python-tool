@@ -28,7 +28,7 @@ Download the result file after fio job end.
 
 get_iops_latency.py
 
-Use multiprocess modul to get the Iops and Latency in ".log" files from  path whcih user submit.
+Use multiprocess module to get the Iops and Latency in ".log" files from  path whcih user submit.
 
 ~~~{.sh}
 ./get_iops_latency.py logpath
