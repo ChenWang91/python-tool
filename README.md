@@ -23,7 +23,7 @@ Use multiprocess, paramiko, subprocess, ftplib modules to run multi VMs, and log
 Download the result file after fio job end.
 
 ~~~{.sh}
-./autossh.py vmnumber runtime
+./autossh.py vmnumber runtime model
 ~~~
 
 get_iops_latency.py
