@@ -17,7 +17,7 @@ How to use sys and argparse libraries to parse the parameters from python script
 <a id="Autossh"></a>
 ## autossh
 
-ssh_fio.py
+autossh.py
 
 Use multiprocess, paramiko, subprocess, ftplib modules to run multi VMs, and log into VMs run fio job at the same time.
 Download the result file after fio job end.
