@@ -6,6 +6,8 @@ Demos for using different python libraries.
 
 * [argv](#Argv)
 * [autossh](#Autossh)
+* [generate](#Generate)
+* [higherdef](#Higherdef)
 
 
 <a id="Argv"></a>
@@ -33,3 +35,26 @@ Use multiprocess module to get the Iops and Latency in ".log" files from  path w
 ~~~{.sh}
 ./get_iops_latency.py logpath
 ~~~
+
+<a id="Generate"></a>
+## generate
+
+list_generate.py
+
+change "[]" to "()" in list comprehension and become python generate
+
+generate.py
+
+example about python generator(yield, next(), send()).
+
+coroutine.py
+
+example about python coroutine with generator
+
+<a id="Higherdef"></a>
+## higherdef
+
+selfhigher.py
+
+example about python higher-order functions:
+map(), reduce(), filter(), sum(), any(), all()
