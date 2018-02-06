@@ -16,3 +16,7 @@ if __name__ == '__main__':
 	print('Map function result is:', map(test_map, testlist))
 	print('Reduce function result is:', reduce(test_reduce, testlist))
 	print('Filter function result is:', filter(test_filter, testlist))
+        # test sum, all, any
+        print('Sum function return',sum(testlist))
+        print('All function return',all([True, False]))
+        print('Any function return',any([True, False]))
