@@ -3,7 +3,7 @@
 """
 Created on Wed Aug 08 14:51:10 2018
 
-@author: chenwa2x
+@author: chenwang91
 """
 import itchat
 import requests
